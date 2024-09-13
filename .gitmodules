@@ -1,0 +1,7 @@
+[submodule "qlu/themes/ananke"]
+	path = qlu/themes/ananke
+	url = https://github.com/theNewDynamic/gohugo-theme-ananke.git
+[submodule "qlu/themes/hermit-v2"]
+	path = qlu/themes/hermit-v2
+	url = https://github.com/1bl4z3r/hermit-V2
+	branch = main
