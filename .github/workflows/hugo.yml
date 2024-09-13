@@ -4,7 +4,7 @@ name: Deploy Hugo site to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["pages"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -54,10 +54,9 @@ jobs:
           HUGO_ENVIRONMENT: production
         run: |
           hugo \
+            --source qlu \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
-        with:
-          path: ./qlu
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
