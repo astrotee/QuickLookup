@@ -41,7 +41,7 @@ def get(uri):
     parsed = urlparse(uri)
     scheme = parsed.scheme
     for engine in engines:
-        if engine.SCHEME == scheme:
+        if engine.SCHEME == scheme or parsed.netloc in engine.URIS:
             return engine.get(uri)
     raise ValueError("engine not found!")
 
@@ -63,8 +63,11 @@ def pick_item(items):
 def main():
     args = set_args()
     if args.uri:
-        item = get(args.uri)[1].decode("utf-8")
-        print(html2text(item))
+        item = get(args.uri)[1]
+        if os.isatty(1):
+            print(html2text(item))
+        else:
+            print(item, flush=True)
         return
 
     results = query(" ".join(args.query))

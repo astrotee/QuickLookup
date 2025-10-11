@@ -8,12 +8,18 @@ from slob import open as slopen, find
 
 class SlobEngine:
     SCHEME = "slob"
+    URIS = {}
 
     def __init__(self) -> None:
         self.slobs = {}
         for name in Path(path.expanduser("~/.local/share/qlu/dicts/")).glob("*.slob"):
             slob = slopen(str(name))
             self.slobs[slob.id] = slob
+            uri = slob.tags.get("uri")
+            if uri:
+                netloc = urlparse(uri).netloc
+                slobs = self.URIS.setdefault(netloc, [])
+                slobs.append(slob)
 
     def query(self, keyword: str):
         results = find(keyword, self.slobs.values())
@@ -27,8 +33,17 @@ class SlobEngine:
 
     def get(self, uri: str):
         parsed = urlparse(uri)
-        assert parsed.scheme == "slob"
+        assert parsed.scheme == "slob" or parsed.netloc in self.URIS
         slob_id = parsed.netloc
         item_key = parsed.path
-        item_id = int(parsed.query.lstrip("blob="))
-        return self.slobs[slob_id].get(item_id)
+        if parsed.scheme == "slob":
+            item_id = int(parsed.query.lstrip("blob="))
+            result = self.slobs[slob_id].get(item_id)
+        elif slob_id in self.URIS:
+            key = item_key.split('/')[-1]
+            results = find(key, self.URIS[slob_id])
+            _, item = next(results)
+            result = item.content_type, item.content
+        else:
+            raise KeyError()
+        return  result[0], result[1].decode("utf-8")
