@@ -1,7 +1,7 @@
 """ "Slob engine"""
 
 from os import path
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from pathlib import Path
 from slob import open as slopen, find
 
@@ -36,14 +36,15 @@ class SlobEngine:
         assert parsed.scheme == "slob" or parsed.netloc in self.URIS
         slob_id = parsed.netloc
         item_key = parsed.path
-        if parsed.scheme == "slob":
-            item_id = int(parsed.query.lstrip("blob="))
+        parsed_query = parse_qs(parsed.query) if parsed.query else None
+        if parsed.scheme == "slob" and parsed_query and "blob" in parsed_query:
+            item_id = int(parsed_query["blob"][0])
             result = self.slobs[slob_id].get(item_id)
         elif slob_id in self.URIS:
-            key = item_key.split('/')[-1]
+            key = item_key.split("/")[-1]
             results = find(key, self.URIS[slob_id])
             _, item = next(results)
             result = item.content_type, item.content
         else:
             raise KeyError()
-        return  result[0], result[1].decode("utf-8")
+        return result[0], result[1].decode("utf-8")
