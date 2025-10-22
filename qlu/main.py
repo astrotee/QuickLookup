@@ -6,13 +6,14 @@ from urllib.parse import urlparse
 from html2text import html2text
 from qlu import engines
 import webview
+import cherrypy
 from iterfzf import iterfzf
 
 
 def set_args():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-q", "--query", nargs="+", help="the query used to lookup")
+    group.add_argument("-q", "--query", nargs="*", help="the query used to lookup")
     group.add_argument("-g", "--get", dest="uri")
     parser.add_argument(
         "-f", dest="first", action="store_true", help="return the first result"
@@ -54,10 +55,56 @@ def pick_item(items):
     # return items[i]
     def transform():
         for i, item in enumerate(items):
-            yield f"{item['id']}\x1e{item['label']}\x1e{item['key']}\x1e{item['content']}\0"
+            yield f"{item['id']}\x1e{item['label']}\x1e{item['key']}\x1e{item['link']}\0"
 
-    choice = iterfzf(transform(), __extra__=["-d", "\036", "--with-nth", "{2}\t{3}"])
-    print(choice)
+    try:
+        choice = iterfzf(
+            transform(),
+            preview="w3m -T text/html -dump {4}",
+            bind={
+                "ctrl-f": "preview-page-down",
+                "ctrl-b": "preview-page-up",
+                "enter": "execute:(w3m -T text/html {4})",
+            },
+            __extra__=[
+                "--reverse",
+                "-d",
+                "\036",
+                "--with-nth",
+                "{2} {3}",
+                "--read0",
+                "--accept-nth",
+                "4",
+                "--info=inline",
+                "--preview-window=down,80%",
+            ],
+        )
+        print(choice)
+        return choice
+    except KeyboardInterrupt:
+        pass
+
+
+def loop(q, args):
+    while True:
+        results = query(q)
+
+        if not os.isatty(1):
+            for r in results:
+                # print(f"{r['id']}\t{r['key']}\t{r['label']}")
+                print(
+                    "\x1e".join((r["id"], r["label"], r["key"], r["link"])),
+                    end="\0",
+                    flush=True,
+                )
+            return
+
+        if args.first:
+            item = next(results)
+        else:
+            item = pick_item(results)
+        # display_content(item)
+        q = input("> ")
 
 
 def main():
@@ -70,23 +117,16 @@ def main():
             print(item, flush=True)
         return
 
-    results = query(" ".join(args.query))
-
-    if not os.isatty(1):
-        for r in results:
-            # print(f"{r['id']}\t{r['key']}\t{r['label']}")
-            print(
-                f"{r['id']}\x1e{r['label']}\x1e{r['key']}\x1e{r['content']}",
-                end="\0",
-                flush=True,
-            )
-        return
-
-    if args.first:
-        item = next(results)
+    if len(args.query) == 0:
+        q = input("> ")
     else:
-        item = pick_item(results)
-    display_content(item)
+        q = " ".join(args.query)
+    cherrypy.engine.start()
+    try:
+        loop(q, args)
+    except KeyboardInterrupt:
+        pass
+    cherrypy.engine.exit()
 
 
 if __name__ == "__main__":
