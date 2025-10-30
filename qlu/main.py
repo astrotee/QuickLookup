@@ -83,6 +83,8 @@ def pick_item(items):
         return choice
     except KeyboardInterrupt:
         pass
+    except AttributeError:
+        print("Nothing Found!")
 
 
 def loop(q, args):
