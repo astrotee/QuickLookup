@@ -1,6 +1,7 @@
 """ "Slob engine"""
 
 from os import path
+import sys
 from urllib.parse import urlparse, parse_qs
 from pathlib import Path
 from slob import open as slopen, find
@@ -35,7 +36,11 @@ class SlobEngine:
             result["id"] = f"slob://{slob.id}/{item.key}?blob={item.id}#{item.fragment}"
             result["key"] = item.key
             result["label"] = slob.tags.get("label")
-            result["content"] = item.content.decode("utf-8")
+            try:
+                result["content"] = item.content.decode("utf-8")
+            except Exception:
+                print(result, file=sys.stderr)
+                continue
             result["link"] = (
                 f"http://localhost:8023/slob/{slob.id}/{item.key}?blob={item.id}#{item.fragment}"
             )
