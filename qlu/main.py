@@ -8,6 +8,7 @@ from qlu import engines
 import webview
 import cherrypy
 from iterfzf import iterfzf
+import readline
 
 
 def set_args():
