@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from html2text import html2text
 from qlu import engines
 import webview
-import cherrypy
+from .server import ServerContext
 from iterfzf import iterfzf
 import readline
 
@@ -124,12 +124,11 @@ def main():
         q = input("> ")
     else:
         q = " ".join(args.query)
-    cherrypy.engine.start()
-    try:
-        loop(q, args)
-    except KeyboardInterrupt:
-        pass
-    cherrypy.engine.exit()
+    with ServerContext():
+        try:
+            loop(q, args)
+        except KeyboardInterrupt:
+            pass
 
 
 if __name__ == "__main__":
