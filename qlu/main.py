@@ -88,7 +88,12 @@ def pick_item(items):
         print("Nothing Found!")
 
 
-def loop(q, args):
+def loop(args):
+    prompt = "> " if os.isatty(0) else ""
+    if len(args.query) == 0:
+        q = input(prompt)
+    else:
+        q = " ".join(args.query)
     while True:
         results = query(q)
 
@@ -107,7 +112,7 @@ def loop(q, args):
         else:
             item = pick_item(results)
         # display_content(item)
-        q = input("> ")
+        q = input(prompt)
 
 
 def main():
@@ -120,14 +125,10 @@ def main():
             print(item, flush=True)
         return
 
-    if len(args.query) == 0:
-        q = input("> ")
-    else:
-        q = " ".join(args.query)
     with ServerContext():
         try:
-            loop(q, args)
-        except KeyboardInterrupt:
+            loop(args)
+        except (KeyboardInterrupt, EOFError):
             pass
 
 
