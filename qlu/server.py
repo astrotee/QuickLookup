@@ -24,3 +24,5 @@ class ServerContext:
     def __exit__(self, exc_type, exc_value, traceback):
         if self.started:
             cherrypy.engine.exit()
+        if exc_type in (KeyboardInterrupt, EOFError):
+            return True

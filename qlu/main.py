@@ -126,10 +126,7 @@ def main():
         return
 
     with ServerContext():
-        try:
-            loop(args)
-        except (KeyboardInterrupt, EOFError):
-            pass
+        loop(args)
 
 
 if __name__ == "__main__":
