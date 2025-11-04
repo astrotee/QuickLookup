@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import socket
+from qlu import engines
 
 import cherrypy
 
@@ -12,6 +13,19 @@ def is_port_in_use(port):
 
 class ServerContext:
     started = False
+
+    def __init__(self):
+        cherrypy.config.update(
+            {
+                "environment": "embedded",
+                "server.socket_port": 8023,
+            }
+        )
+
+        config = {"/": {"request.dispatch": cherrypy.dispatch.MethodDispatcher()}}
+
+        for engine in engines:
+            cherrypy.tree.mount(engine.handler, engine.BASE, config=config)
 
     def __enter__(self):
         port = cherrypy.config.get("server.socket_port")
