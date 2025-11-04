@@ -2,7 +2,7 @@
 
 from os import path
 import sys
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, quote
 from pathlib import Path
 from slob import open as slopen, find
 import cherrypy
@@ -32,8 +32,9 @@ class SlobEngine:
     def query(self, keyword: str):
         results = find(keyword, self.slobs.values())
         for slob, item in results:
+            qkey = quote(item.key, "")
             result = {}
-            result["id"] = f"slob://{slob.id}/{item.key}?blob={item.id}#{item.fragment}"
+            result["id"] = f"slob://{slob.id}/{qkey}?blob={item.id}#{item.fragment}"
             result["key"] = item.key
             result["label"] = slob.tags.get("label")
             try:
@@ -42,7 +43,7 @@ class SlobEngine:
                 print(result, file=sys.stderr)
                 continue
             result["link"] = (
-                f"http://localhost:8023/slob/{slob.id}/{item.key}?blob={item.id}#{item.fragment}"
+                f"http://localhost:8023/slob/{slob.id}/{qkey}?blob={item.id}#{item.fragment}"
             )
             yield result
 
