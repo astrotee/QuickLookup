@@ -96,8 +96,7 @@ class Root:
 
         if not slob and blob_id:
             raise cherrypy.NotFound
-
-        if blob_id:
+        elif slob and blob_id:
             content_type, content = slob.get(int(blob_id))
             cherrypy.response.headers["Content-Type"] = content_type
             cherrypy.response.headers["Cache-Control"] = "max-age=31556926"
@@ -114,6 +113,8 @@ class Root:
             search_slobs.extend(slobs)
 
         for slb, item in find(key, search_slobs, match_prefix=False):
+            if slb is None:
+                continue
             cherrypy.response.headers["X-URI"] = slb.tags.get("uri")
             cherrypy.response.headers["X-id"] = slb.id
             if slob:
