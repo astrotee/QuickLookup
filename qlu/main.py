@@ -5,7 +5,6 @@ from itertools import chain
 from urllib.parse import urlparse
 from html2text import html2text
 from qlu import engines
-import webview
 from .server import ServerContext
 from iterfzf import iterfzf
 import readline
@@ -20,16 +19,6 @@ def set_args():
         "-f", dest="first", action="store_true", help="return the first result"
     )
     return parser.parse_args()
-
-
-def display_content(item):
-    # print(f"{item['label']}\t{item['key']}")
-    # print(html2text(item["content"]))
-    window = webview.create_window(
-        f"{item['label']}-{item['key']}", html=item["content"]
-    )
-    webview.start()
-    return
 
 
 def query(key):
@@ -111,7 +100,6 @@ def loop(args):
             item = next(results)
         else:
             item = pick_item(results)
-        # display_content(item)
         q = input(prompt)
 
 
