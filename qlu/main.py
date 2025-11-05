@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from html2text import html2text
 from qlu import engines
 from .server import ServerContext
-from iterfzf import iterfzf
+from .picker import pick_iterfzf, pick_pipe
 import readline
 
 
@@ -37,46 +37,6 @@ def get(uri):
     raise ValueError("engine not found!")
 
 
-def pick_item(items):
-    # items = list(items)
-    # for i, item in enumerate(items):
-    #     print(f"[{i}] {item['label']}\t{item['key']}")
-    # i = int(input("> "))
-    # return items[i]
-    def transform():
-        for i, item in enumerate(items):
-            yield f"{item['id']}\x1e{item['label']}\x1e{item['key']}\x1e{item['link']}\0"
-
-    try:
-        choice = iterfzf(
-            transform(),
-            preview="w3m -T text/html -dump {4}",
-            bind={
-                "ctrl-f": "preview-page-down",
-                "ctrl-b": "preview-page-up",
-                "enter": "execute:(w3m -T text/html {4})",
-            },
-            __extra__=[
-                "--reverse",
-                "-d",
-                "\036",
-                "--with-nth",
-                "{2} {3}",
-                "--read0",
-                "--accept-nth",
-                "4",
-                "--info=inline",
-                "--preview-window=down,80%",
-            ],
-        )
-        print(choice)
-        return choice
-    except KeyboardInterrupt:
-        pass
-    except AttributeError:
-        print("Nothing Found!")
-
-
 def loop(args):
     prompt = "> " if os.isatty(0) else ""
     if len(args.query) == 0:
@@ -87,19 +47,13 @@ def loop(args):
         results = query(q)
 
         if not os.isatty(1):
-            for r in results:
-                # print(f"{r['id']}\t{r['key']}\t{r['label']}")
-                print(
-                    "\x1e".join((r["id"], r["label"], r["key"], r["link"])),
-                    end="\0",
-                    flush=True,
-                )
+            pick_pipe(results)
             return
 
         if args.first:
             item = next(results)
         else:
-            item = pick_item(results)
+            item = pick_iterfzf(results)
         q = input(prompt)
 
 
