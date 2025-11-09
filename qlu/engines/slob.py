@@ -1,11 +1,13 @@
-""" "Slob engine"""
+"""Slob engine"""
 
-from os import path
 import sys
-from urllib.parse import urlparse, parse_qs, quote
+from os import path
 from pathlib import Path
-from slob import open as slopen, find
+from urllib.parse import parse_qs, quote, urlparse
+
 import cherrypy
+from slob import find
+from slob import open as slopen
 
 NOTHING_FOUND = (
     '<div align="center"><em>Nothing found for <strong>{0}</strong></em></div>'

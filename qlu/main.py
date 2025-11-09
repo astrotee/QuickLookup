@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-import os
 import argparse
+import os
+import readline
 from itertools import chain
 from urllib.parse import urlparse
+
 from html2text import html2text
-from qlu import engines
-from .server import ServerContext
+
+from . import engines
 from .picker import pick_iterfzf, pick_pipe
-import readline
+from .server import ServerContext
 
 
 def set_args():
