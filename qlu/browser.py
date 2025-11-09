@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import webbrowser
 
 import webview
 from html2text import html2text
@@ -15,3 +16,7 @@ def display_webview(item):
 def display_text(item):
     print(f"{item['label']}\t{item['key']}")
     print(html2text(item["content"]))
+
+
+def display_webbrowser(item):
+    webbrowser.open(item["link"])
