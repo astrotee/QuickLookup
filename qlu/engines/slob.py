@@ -1,9 +1,12 @@
 """Slob engine"""
 
+from collections import OrderedDict
 import sys
 from os import path
 from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
+
+from qlu.config import load_config
 
 import cherrypy
 from slob import find
@@ -20,8 +23,20 @@ class SlobEngine:
     URIS = {}
 
     def __init__(self) -> None:
-        self.slobs = {}
-        for name in Path(path.expanduser("~/.local/share/qlu/dicts/")).glob("*.slob"):
+        self.config = self.get_config()
+        files = Path(path.expanduser("~/.local/share/qlu/dicts/")).glob("*.slob")
+
+        def sortkey(f):
+            index = 0
+            for index, name in enumerate(self.config["order"]):
+                if name.lower() in f.name.lower():
+                    return index
+            return len(self.config["order"])
+
+        if "order" in self.config:
+            files = sorted(files, key=sortkey)
+        self.slobs = OrderedDict()
+        for name in files:
             slob = slopen(str(name))
             self.slobs[slob.id] = slob
             uri = slob.tags.get("uri")
@@ -30,6 +45,12 @@ class SlobEngine:
                 slobs = self.URIS.setdefault(netloc, [])
                 slobs.append(slob)
             self.handler = Root(self.slobs)
+
+    def get_config(self):
+        c = load_config()
+        if c and "engines" in c and "slob" in c["engines"]:
+            return c["engines"]["slob"]
+        return {}
 
     def query(self, keyword: str):
         results = find(keyword, self.slobs.values())
