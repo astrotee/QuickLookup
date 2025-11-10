@@ -1,16 +1,15 @@
 """Slob engine"""
 
-from collections import OrderedDict
 import sys
-from os import path
+from collections import OrderedDict
 from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
-
-from qlu.config import load_config
 
 import cherrypy
 from slob import find
 from slob import open as slopen
+
+from qlu.config import load_config
 
 NOTHING_FOUND = (
     '<div align="center"><em>Nothing found for <strong>{0}</strong></em></div>'
@@ -24,7 +23,8 @@ class SlobEngine:
 
     def __init__(self) -> None:
         self.config = self.get_config()
-        files = Path(path.expanduser("~/.local/share/qlu/dicts/")).glob("*.slob")
+        path = self.config.get("path", "~/.local/share/qlu/dicts/")
+        files = Path(path).expanduser().glob("*.slob")
 
         def sortkey(f):
             index = 0
