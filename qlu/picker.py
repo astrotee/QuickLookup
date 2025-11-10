@@ -3,14 +3,17 @@
 from iterfzf import iterfzf
 
 
-def pick_iterfzf(items):
-    def transform():
-        for item in items:
-            yield f"{item['id']}\x1e{item['label']}\x1e{item['key']}\x1e{item['link']}\0"
 
+def row_generator(items, fields, /, fs="\t", rs=""):
+    for item in items:
+        row = [item[x] or "None" for x in fields if x in item]
+        yield fs.join(row) + rs
+
+
+def pick_iterfzf(items):
     try:
         choice = iterfzf(
-            transform(),
+            row_generator(items, ["id", "label", "key", "link"], "\x1e", "\0"),
             preview="w3m -T text/html -dump {4}",
             bind={
                 "ctrl-f": "preview-page-down",
@@ -47,9 +50,5 @@ def pick_loop(items):
 
 
 def pick_pipe(items):
-    for r in items:
-        print(
-            "\x1e".join((r["id"], r["label"], r["key"], r["link"])),
-            end="\0",
-            flush=True,
-        )
+    for r in row_generator(items, ["id", "label", "key", "link"], "\x1e", "\0"):
+        print(r, flush=True)
