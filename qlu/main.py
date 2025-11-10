@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 from html2text import html2text
 
 from . import engines
+from .config import load_config
 from .picker import pick_iterfzf, pick_pipe
 from .server import ServerContext
 
@@ -61,6 +62,7 @@ def loop(args):
 
 def main():
     args = set_args()
+    load_config()
     if args.uri:
         item = get(args.uri)[1]
         if os.isatty(1):
