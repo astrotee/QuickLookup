@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import atexit
 import os
 import readline
 from itertools import chain
@@ -8,7 +9,7 @@ from urllib.parse import urlparse
 from html2text import html2text
 
 from . import engines
-from .config import load_config
+from .config import load_config, confbase
 from .picker import pick_iterfzf, pick_pipe
 from .server import ServerContext
 
@@ -22,6 +23,24 @@ def set_args():
         "-f", dest="first", action="store_true", help="return the first result"
     )
     return parser.parse_args()
+
+
+def init_readline():
+    histfile = confbase.joinpath("search_history")
+
+    try:
+        readline.read_history_file(histfile)
+        h_len = readline.get_current_history_length()
+    except FileNotFoundError:
+        open(histfile, "wb").close()
+        h_len = 0
+
+    def save(prev_h_len, histfile):
+        new_h_len = readline.get_current_history_length()
+        readline.set_history_length(1000)
+        readline.append_history_file(new_h_len - prev_h_len, histfile)
+
+    atexit.register(save, h_len, histfile)
 
 
 def query(key):
@@ -63,6 +82,7 @@ def loop(args):
 def main():
     args = set_args()
     load_config()
+    init_readline()
     if args.uri:
         item = get(args.uri)[1]
         if os.isatty(1):
