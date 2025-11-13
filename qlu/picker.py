@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Iterable
 from iterfzf import iterfzf
 
 from .config import parsed_config, confbase
@@ -17,21 +18,27 @@ def iter_file(file):
             yield line.strip()
 
 
-def pick(input=None):
-    """if input is None pick from the history file"""
+def pick(input: int | Iterable):
+    """if input is 1 pick from the history file
+    if input is 2 pick from the bookmarks file
+    else it's a Iterable to iterate"""
     config = parsed_config.get("picker", {})
     fields = config.get("fields", ["id", "key", "label", "link"])
     delimeter = config.get("delimeter", "\t")
     rs = config.get("rs", "")
-    if input is None:
+    if input == 1:
         histfile = confbase.joinpath("picker_history")
         i = iter_file(histfile)
+    elif input == 2:
+        bmfile = confbase.joinpath("bookmarks")
+        i = iter_file(bmfile)
     else:
         i = row_generator(input, fields, delimeter, rs)
     pick_iterfzf(i, config, input is not None)
 
 
 def pick_iterfzf(iterator, config, history=True):
+    bmfile = confbase.joinpath("bookmarks")
     delimeter = config.get("delimeter", "\t")
     fzfconfig = parsed_config.get("fzf", {})
     preview = fzfconfig.get("preview", "w3m -T text/html -dump {4}")
@@ -39,6 +46,7 @@ def pick_iterfzf(iterator, config, history=True):
         "ctrl-f": "preview-page-down",
         "ctrl-b": "preview-page-up",
         "enter": "execute(w3m -T text/html {4})",
+        "alt-b": f"execute(echo {{}} >> {bmfile})",
     }
     binds_config = fzfconfig.get("binds", {})
     binds.update(binds_config)

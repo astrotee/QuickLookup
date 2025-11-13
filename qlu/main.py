@@ -20,6 +20,9 @@ def set_args():
     group.add_argument("-q", "--query", nargs="*", help="the query used to lookup")
     group.add_argument("-g", "--get", dest="uri")
     group.add_argument("-H", "--history", action="store_true", help="pick from history")
+    group.add_argument(
+        "-B", "--bookmarks", action="store_true", help="pick from bookmarks"
+    )
     parser.add_argument(
         "-f", dest="first", action="store_true", help="return the first result"
     )
@@ -94,7 +97,9 @@ def main():
 
     with ServerContext():
         if args.history:
-            pick()
+            pick(1)
+        elif args.bookmarks:
+            pick(2)
         else:
             loop(args)
 
