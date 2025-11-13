@@ -2,7 +2,7 @@
 
 from iterfzf import iterfzf
 
-from .config import parsed_config
+from .config import parsed_config, confbase
 
 
 def row_generator(items, fields, fs="\t", rs=""):
@@ -11,37 +11,62 @@ def row_generator(items, fields, fs="\t", rs=""):
         yield fs.join(row) + rs
 
 
-def pick_iterfzf(items):
-    config = parsed_config.get("picker", {}).get("fzf", {})
+def iter_file(file):
+    with open(file, "rb") as f:
+        for line in f:
+            yield line.strip()
+
+
+def pick(input=None):
+    """if input is None pick from the history file"""
+    config = parsed_config.get("picker", {})
     fields = config.get("fields", ["id", "key", "label", "link"])
     delimeter = config.get("delimeter", "\t")
     rs = config.get("rs", "")
-    preview = config.get("preview", "w3m -T text/html -dump {4}")
+    if input is None:
+        histfile = confbase.joinpath("picker_history")
+        i = iter_file(histfile)
+    else:
+        i = row_generator(input, fields, delimeter, rs)
+    pick_iterfzf(i, config, input is not None)
+
+
+def pick_iterfzf(iterator, config, history=True):
+    delimeter = config.get("delimeter", "\t")
+    fzfconfig = parsed_config.get("fzf", {})
+    preview = fzfconfig.get("preview", "w3m -T text/html -dump {4}")
     binds = {
         "ctrl-f": "preview-page-down",
         "ctrl-b": "preview-page-up",
         "enter": "execute(w3m -T text/html {4})",
     }
-    binds_config = config.get("binds", {})
+    binds_config = fzfconfig.get("binds", {})
     binds.update(binds_config)
-    options = config.get("options", [])
+    if history:
+        histfile = confbase.joinpath("picker_history")
+        if "enter" in binds and not binds["enter"].isspace():
+            binds["enter"] = f"execute(echo {{}} >> {histfile})+" + binds["enter"]
+        else:
+            binds["enter"] = f"execute(echo {{}} >> {histfile})"
+    options = [
+        "--reverse",
+        "-d",
+        delimeter,
+        "--with-nth",
+        "{2} {3}",
+        "--accept-nth",
+        "4",
+        "--info=inline",
+        "--preview-window=down,80%",
+    ]
+    options_config = config.get("options", [])
+    options.extend(options_config)
     try:
         choice = iterfzf(
-            row_generator(items, fields, delimeter, rs),
+            iterator,
             preview=preview,
             bind=binds,
-            __extra__=[
-                "--reverse",
-                "-d",
-                delimeter,
-                "--with-nth",
-                "{2} {3}",
-                "--accept-nth",
-                "4",
-                "--info=inline",
-                "--preview-window=down,80%",
-            ]
-            + options,
+            __extra__=options,
         )
         print(choice)
         return choice

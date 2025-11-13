@@ -10,7 +10,7 @@ from html2text import html2text
 
 from . import engines
 from .config import load_config, confbase
-from .picker import pick_iterfzf, pick_pipe
+from .picker import pick_pipe, pick
 from .server import ServerContext
 
 
@@ -19,6 +19,7 @@ def set_args():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-q", "--query", nargs="*", help="the query used to lookup")
     group.add_argument("-g", "--get", dest="uri")
+    group.add_argument("-H", "--history", action="store_true", help="pick from history")
     parser.add_argument(
         "-f", dest="first", action="store_true", help="return the first result"
     )
@@ -75,7 +76,7 @@ def loop(args):
         if args.first:
             item = next(results)
         else:
-            item = pick_iterfzf(results)
+            item = pick(results)
         q = input(prompt)
 
 
@@ -92,7 +93,10 @@ def main():
         return
 
     with ServerContext():
-        loop(args)
+        if args.history:
+            pick()
+        else:
+            loop(args)
 
 
 if __name__ == "__main__":
