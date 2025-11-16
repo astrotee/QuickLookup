@@ -31,20 +31,16 @@ def set_args():
 
 def init_readline():
     histfile = confbase.joinpath("search_history")
+    readline.parse_and_bind('"\\C-xh": "qlu_history\n"')
+    readline.parse_and_bind('"\\C-xb": "qlu_bookmarks\n"')
+    readline.set_auto_history(False)
 
     try:
         readline.read_history_file(histfile)
-        h_len = readline.get_current_history_length()
     except FileNotFoundError:
         open(histfile, "wb").close()
-        h_len = 0
 
-    def save(prev_h_len, histfile):
-        new_h_len = readline.get_current_history_length()
-        readline.set_history_length(1000)
-        readline.append_history_file(new_h_len - prev_h_len, histfile)
-
-    atexit.register(save, h_len, histfile)
+    atexit.register(readline.write_history_file, histfile)
 
 
 def query(key):
@@ -70,6 +66,16 @@ def loop(args):
     else:
         q = " ".join(args.query)
     while True:
+        if q.startswith("qlu_"):
+            if q == "qlu_history":
+                pick(1)
+            elif q == "qlu_bookmarks":
+                pick(2)
+            q = input(prompt)
+            continue
+        else:
+            readline.add_history(q)
+
         results = query(q)
 
         if not os.isatty(1):
