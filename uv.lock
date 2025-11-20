@@ -345,8 +345,12 @@ dependencies = [
     { name = "cherrypy" },
     { name = "html2text" },
     { name = "iterfzf" },
-    { name = "pywebview" },
     { name = "slob" },
+]
+
+[package.optional-dependencies]
+pywebview = [
+    { name = "pywebview" },
 ]
 
 [package.metadata]
@@ -354,9 +358,10 @@ requires-dist = [
     { name = "cherrypy", specifier = ">=18.10.0" },
     { name = "html2text", specifier = ">=2025.4.15" },
     { name = "iterfzf", specifier = ">=1.8.0.62.0" },
-    { name = "pywebview", specifier = ">=6.0" },
+    { name = "pywebview", marker = "extra == 'pywebview'" },
     { name = "slob", git = "https://github.com/itkach/slob.git" },
 ]
+provides-extras = ["pywebview"]
 
 [[package]]
 name = "setuptools"

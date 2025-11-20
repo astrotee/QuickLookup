@@ -5,19 +5,20 @@ description = "Lookup dictionaries, wikis ...etc"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "cherrypy>=18.10.0",
-    "html2text>=2025.4.15",
-    "iterfzf>=1.8.0.62.0",
-    "pywebview>=6.0",
-    "slob",
+  "cherrypy>=18.10.0",
+  "html2text>=2025.4.15",
+  "iterfzf>=1.8.0.62.0",
+  "slob",
 ]
 
 [project.scripts]
 qlu = "qlu:main.main"
 
-[tool.uv.sources]
-slob = { git = "https://github.com/itkach/slob.git" }
+[project.optional-dependencies]
+pywebview = ["pywebview"]
 
 [tool.uv]
 package = true
 
+[tool.uv.sources]
+slob = { git = "https://github.com/itkach/slob.git" }
