@@ -60,11 +60,6 @@ class SlobEngine:
             result["id"] = f"slob://{slob.id}/{qkey}?blob={item.id}#{item.fragment}"
             result["key"] = item.key
             result["label"] = slob.tags.get("label")
-            try:
-                result["content"] = item.content.decode("utf-8")
-            except Exception:
-                print(result, file=sys.stderr)
-                continue
             result["link"] = (
                 f"http://localhost:8023/slob/{slob.id}/{qkey}?blob={item.id}#{item.fragment}"
             )
