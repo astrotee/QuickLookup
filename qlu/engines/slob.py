@@ -44,7 +44,7 @@ class SlobEngine:
                 netloc = urlparse(uri).netloc
                 slobs = self.URIS.setdefault(netloc, [])
                 slobs.append(slob)
-            self.handler = Root(self.slobs)
+        self.handler = Root(self.slobs)
 
     def get_config(self):
         c = load_config()
