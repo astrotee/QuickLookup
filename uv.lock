@@ -155,6 +155,35 @@ wheels = [
 ]
 
 [[package]]
+name = "libzim"
+version = "3.8.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4d/85/2b3767f78eb457f1c0c31e2736cfef9cd7f8c29afa74b0c1d4bc2193c865/libzim-3.8.0.tar.gz", hash = "sha256:ba26858bc587cbef44ef5a4efff9b57f93a3bf806a96aac9602700f545268354", size = 58439 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ba/1e/fe65b6e803c859d6c34aa497cc9da57b6bfba099b92abda2b26aeeda8e6f/libzim-3.8.0-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:e5a2d6f3193386cb50532a5fc323ac79d2a0dafc3f27ffa8ff485cf6e11b7990", size = 3607048 },
+    { url = "https://files.pythonhosted.org/packages/29/83/a2901df3b68223b5ebbe43241901f54cc9c253bad6db9872429356b3cc0b/libzim-3.8.0-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:90c9ae8435371f5d219894e49a6b40bcd7bf5e9dbeff8d3a522a8bd27749db0b", size = 3825141 },
+    { url = "https://files.pythonhosted.org/packages/6b/7f/50c70abfa680c47d3b43f8ba8cbb0ed6d3f7dd252e258bc19a0f043d45d7/libzim-3.8.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:b943444404f42b82f90a7a1f5bfe030b8454bafb5d0becc59d9fe5439602aec4", size = 8204446 },
+    { url = "https://files.pythonhosted.org/packages/a1/4c/ab1ffc55dfec82353a6206f16e1f74f83716d2da205ebcf1f3cb18d0ca29/libzim-3.8.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:bdf1d8e7e6a52ad6fc6a18b9940c72703cae99d04f33ae67b4e0691df912bbcd", size = 8403446 },
+    { url = "https://files.pythonhosted.org/packages/0c/ea/712c046554048b08c39c847960b8f4d670e7e4ceb163a0bfb966d60bb87b/libzim-3.8.0-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:f16f331fc9510f0bc50347150a753b8512a52f5f7d330e49a6739a8fa8053d6e", size = 9528787 },
+    { url = "https://files.pythonhosted.org/packages/f2/66/c85c89653afafc7770ae1db53b6ba2d5ab09aa06af7df3706e1ab5eee604/libzim-3.8.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:15a7fd60fa8778b099053194ee5241429ae980de9d701dca5bc6c8f610426715", size = 9761806 },
+    { url = "https://files.pythonhosted.org/packages/c5/da/73c96422eb01c08795cc530f6139ef3a29ec78cdcaa608a2a849cd85a122/libzim-3.8.0-cp313-cp313-win_amd64.whl", hash = "sha256:71d7105425edb48df8092d0bf09466b777cca03d3d458812f451ae596da630c2", size = 15954236 },
+    { url = "https://files.pythonhosted.org/packages/52/a4/ad46e4d35609d3a60255777b3b11c584c4274b70a91a0e9bafab9ca3f6c1/libzim-3.8.0-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:f4de472eba19aedf3051435c00dba8d71ea8736924d982d19a95e197f44c0a31", size = 3607671 },
+    { url = "https://files.pythonhosted.org/packages/ab/0b/bb3539b9e623e0590455285686aff0d65d4a6ef438ae68157039cf2de538/libzim-3.8.0-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:e57e0f4e63c4761c02cb8406be26e63bd6c0622919dc266b7c698a0232619a6f", size = 3824884 },
+    { url = "https://files.pythonhosted.org/packages/45/7d/284ee13d28fa5d7ff55b909c26f480ee217b8746439922cdd12c18bf7445/libzim-3.8.0-cp314-cp314-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:e28ec915841eda1caada0f3aa777a597018aee4b4e7e19b06b7a11beb069cd64", size = 8202174 },
+    { url = "https://files.pythonhosted.org/packages/e9/1c/e4a6e4121fe1e5a95ffb1182663d4e2ecf6ee9079ed1c4607f4b7d371551/libzim-3.8.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:85081697225a4a048738545529ff04120889a00f6439c9e820db1530978c82e1", size = 8392971 },
+    { url = "https://files.pythonhosted.org/packages/26/e4/566eaa480f88b276a822c705ecb2872e1edf533d47475882696c527e1787/libzim-3.8.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:35d785cfc5b45935f9caec6879a13be9c923db9944b9142bb294a9839b004c76", size = 9532351 },
+    { url = "https://files.pythonhosted.org/packages/e1/25/80014fa04da9bfc78ddafa8c554e5644138ef8c886a77f2d85ff0f076dc7/libzim-3.8.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:50b8abb63ea79db0aa43f1c26f0106e3be96d4d2330b14915da7162b2fe4d966", size = 9751012 },
+    { url = "https://files.pythonhosted.org/packages/23/26/2e8cfc37cc01818095fefb0b96859e3581de5ebd3c23ea0081820362e1f8/libzim-3.8.0-cp314-cp314-win_amd64.whl", hash = "sha256:a0e26819f2c91a35c4082b8ce06c6933154706227d5c41689f167855d6b850a4", size = 16620391 },
+    { url = "https://files.pythonhosted.org/packages/08/08/fc2d834b612d34d244c8f53ba07f47524f0780754b56d02a7127eaf45e79/libzim-3.8.0-cp314-cp314t-macosx_13_0_arm64.whl", hash = "sha256:5066cfa51b7efacc9fdd738fe223b432345e0a0d5b245101c7980e65ca71b9e2", size = 3618129 },
+    { url = "https://files.pythonhosted.org/packages/c6/ae/36c9c94cf6a89facfd81fe4257c94ccf033c6e6c351629168daa2349930d/libzim-3.8.0-cp314-cp314t-macosx_13_0_x86_64.whl", hash = "sha256:69dd82375e5660906adf28440e75899f7a08d96e890ba47f3f30a2fac63d9b6e", size = 3836160 },
+    { url = "https://files.pythonhosted.org/packages/97/14/24b101c1a13bc3399b07379c717590994d6e018e3bc417a9d6ec89e2caed/libzim-3.8.0-cp314-cp314t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:3569a80a13356eae21fc11dd31d09f2d9c748891239447a38e5194db2ff6ee55", size = 8216174 },
+    { url = "https://files.pythonhosted.org/packages/b4/d0/28231d395c4520ce51c5cae8dc0b14f1d052b0ef53e1129f6bee4397808c/libzim-3.8.0-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:58a52b8905ddab20113da4050e436c0963c0571cac49f3c3c77c5bd4f65a6bcb", size = 8390111 },
+    { url = "https://files.pythonhosted.org/packages/5a/df/041cdfaacfbc93d9e87cc0550c00c823eb3ef5fceb3d77878ccd468f84e3/libzim-3.8.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:18983f246d43637d9c765d05d87b2d1092f9cb17ac252d0c8848d41c177a0054", size = 9532101 },
+    { url = "https://files.pythonhosted.org/packages/3b/f5/d61f93e0b4c13e9557f68608fb87e34869b0eb5ac26aef0d28f500ca24c2/libzim-3.8.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:034967fa4fad30c4a5708572fdcde8db1291d37431bc23c5a536937e1a8b3bdc", size = 9740726 },
+    { url = "https://files.pythonhosted.org/packages/4c/cd/01da95fa9e23a923e5b4f743f8f3caee135860e0c5ac7b35ddcc70b9f4a5/libzim-3.8.0-cp314-cp314t-win_amd64.whl", hash = "sha256:bfbda0a67a38c739ad1480ed0efac54893105dfb27e3404f99c3ba6b3fa55429", size = 16649541 },
+]
+
+[[package]]
 name = "more-itertools"
 version = "10.8.0"
 source = { registry = "https://pypi.org/simple" }
@@ -345,6 +374,7 @@ dependencies = [
     { name = "cherrypy" },
     { name = "html2text" },
     { name = "iterfzf" },
+    { name = "libzim" },
     { name = "slob" },
 ]
 
@@ -358,6 +388,7 @@ requires-dist = [
     { name = "cherrypy", specifier = ">=18.10.0" },
     { name = "html2text", specifier = ">=2025.4.15" },
     { name = "iterfzf", specifier = ">=1.8.0.62.0" },
+    { name = "libzim", specifier = ">=3.8.0" },
     { name = "pywebview", marker = "extra == 'pywebview'" },
     { name = "slob", git = "https://github.com/itkach/slob.git" },
 ]

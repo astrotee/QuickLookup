@@ -8,6 +8,7 @@ dependencies = [
   "cherrypy>=18.10.0",
   "html2text>=2025.4.15",
   "iterfzf>=1.8.0.62.0",
+  "libzim>=3.8.0",
   "slob",
 ]
 
