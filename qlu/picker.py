@@ -14,7 +14,7 @@ def row_generator(items, fields, fs="\t", rs=""):
 
 def iter_file(file):
     with open(file, "rb") as f:
-        for line in f:
+        for line in f.readlines()[::-1]:
             yield line.strip()
 
 
